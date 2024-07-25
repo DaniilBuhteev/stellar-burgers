@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
-
+import { v4 as uuid4 } from 'uuid';
 interface IConstructor {
   bun: TIngredient | null;
   ingredients: TConstructorIngredient[];
@@ -30,9 +30,13 @@ export const constructorSlice = createSlice({
           state.bun = action.payload;
         }
       },
-      prepare: (ingredient: TIngredient, id: string) => ({
-        payload: ingredient.type === 'bun' ? ingredient : { ...ingredient, id }
-      })
+      prepare: (ingredient: TIngredient) => {
+        if (ingredient.type === 'bun') {
+          return { payload: ingredient };
+        } else {
+          return { payload: { ...ingredient, id: uuid4() } };
+        }
+      }
     },
     removeIngredient: (state, action: PayloadAction<string>) => {
       state.ingredients = state.ingredients.filter(
