@@ -7,7 +7,7 @@ export interface FeedsState {
   total: number;
   totalToday: number;
   isLoading: boolean;
-  error: SerializedError | null;
+  error: string | undefined;
 }
 
 export const initialState: FeedsState = {
@@ -15,7 +15,7 @@ export const initialState: FeedsState = {
   total: 0,
   totalToday: 0,
   isLoading: false,
-  error: null
+  error: ''
 };
 
 export const feedsSlice = createSlice({
@@ -41,7 +41,7 @@ export const feedsSlice = createSlice({
       })
       .addCase(getFeedsThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.error.message;
       });
   }
 });

@@ -10,13 +10,13 @@ import { getOrdersThunk } from './orderThunk';
 interface IOrder {
   orders: TOrder[];
   isLoading: boolean;
-  error: SerializedError | null;
+  error: string | undefined;
 }
 
-const initialState: IOrder = {
+export const initialState: IOrder = {
   orders: [],
   isLoading: false,
-  error: null
+  error: undefined
 };
 
 export const orderSlice = createSlice({
@@ -32,7 +32,6 @@ export const orderSlice = createSlice({
     builder
       .addCase(getOrdersThunk.pending, (state) => {
         state.isLoading = true;
-        state.error = null;
       })
       .addCase(getOrdersThunk.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -40,7 +39,7 @@ export const orderSlice = createSlice({
       })
       .addCase(getOrdersThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.error.message;
       });
   }
 });

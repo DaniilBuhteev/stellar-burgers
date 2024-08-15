@@ -5,13 +5,13 @@ import { TIngredient } from '@utils-types';
 export interface IIngredients {
   requestStatus: 'Idle' | 'Loading' | 'Success' | 'Failed';
   ingredients: TIngredient[];
-  error: SerializedError | null;
+  error: string | undefined;
 }
 
 export const initialState: IIngredients = {
   requestStatus: 'Idle',
   ingredients: [],
-  error: null
+  error: undefined
 };
 
 export const ingredientsSlice = createSlice({
@@ -34,7 +34,7 @@ export const ingredientsSlice = createSlice({
       })
       .addCase(getIngredientsThunk.rejected, (state, action) => {
         state.requestStatus = 'Failed';
-        state.error = action.error;
+        state.error = action.error.message;
       });
   }
 });

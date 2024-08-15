@@ -5,13 +5,13 @@ import { getOrderByNumberThunk, orderModalThunk } from './orderModalThunk';
 export interface OrderModalState {
   order: TOrder | null;
   isLoading: boolean;
-  error: SerializedError | null;
+  error: string | undefined;
 }
 
 export const initialState: OrderModalState = {
   order: null,
   isLoading: false,
-  error: null
+  error: undefined
 };
 
 export const orderModalSlice = createSlice({
@@ -37,7 +37,7 @@ export const orderModalSlice = createSlice({
       })
       .addCase(orderModalThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.error.message;
       })
       .addCase(getOrderByNumberThunk.pending, (state) => {
         state.isLoading = true;
@@ -48,7 +48,7 @@ export const orderModalSlice = createSlice({
       })
       .addCase(getOrderByNumberThunk.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.error;
+        state.error = action.error.message;
       });
   }
 });

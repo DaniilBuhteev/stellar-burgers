@@ -5,23 +5,21 @@ import {
   registerUserThunk,
   getUserThunk,
   updateUserThunk,
-  forgotPasswordThunk,
-  logoutThunk,
-  resetPasswordThunk
+  logoutThunk
 } from './userThunk';
 
 interface isAuthState {
   user: TUser | null;
   isLoading: boolean;
   isCheck: boolean;
-  error: SerializedError | null;
+  error: string | undefined;
 }
 
-const initialState: isAuthState = {
+export const initialState: isAuthState = {
   user: null,
   isLoading: false,
   isCheck: false,
-  error: null
+  error: undefined
 };
 
 export const userSlice = createSlice({
@@ -37,47 +35,44 @@ export const userSlice = createSlice({
     builder
       //REGISTER
       .addCase(registerUserThunk.pending, (state) => {
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(registerUserThunk.rejected, (state, action) => {
-        state.error = action.error;
+        state.error = action.error.message;
       })
       .addCase(registerUserThunk.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isCheck = true;
-        state.error = null;
+        state.error = undefined;
       })
       //LOGIN
       .addCase(loginUserThunk.pending, (state) => {
         state.isCheck = false;
-        state.error = null;
+        state.error = undefined;
       })
       .addCase(loginUserThunk.rejected, (state, action) => {
         state.isCheck = false;
-        state.error = action.error;
+        state.error = action.error.message;
       })
 
       .addCase(loginUserThunk.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isCheck = true;
-        state.error = null;
+        state.error = undefined;
       })
       //USER
       .addCase(getUserThunk.rejected, (state, action) => {
         state.isCheck = false;
-        state.error = action.error;
+        state.error = action.error.message;
       })
       .addCase(getUserThunk.fulfilled, (state, action) => {
         state.isCheck = true;
         state.user = action.payload.user;
       })
       //UPDATE
-      .addCase(updateUserThunk.pending, (state) => {
-        state.error = null;
-      })
       .addCase(updateUserThunk.rejected, (state, action) => {
         state.isCheck = false;
-        state.error = action.error;
+        state.error = action.error.message;
       })
       .addCase(updateUserThunk.fulfilled, (state, action) => {
         state.isCheck = true;
